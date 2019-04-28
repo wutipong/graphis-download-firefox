@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <section class="section">
+        <h1 class="title">Graphis Download Helper</h1>
+        <div class="field">
+            <label class="label">Directory</label>
+            <div class="control">
+                <input class="input" type="text" id="directory">
+            </div>
+            <p class="help">Path inside Chrome's Download</p>
+        </div>
+        <div class="field">
+            <label class="label">Name</label>
+        </div>
+        <div class="field has-addons">
+            <div class="control">
+                <input class="input" type="text" id="name" placeholder="Model Name [Collection]">
+            </div>
+            <div class="control">
+                <button id="clear" class="button is-danger" type="button">Clear</button>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Category</label>
+            <div class="control">
+                <div class="select">
+                    <select class="input" id="category">
+                        <option>Graphis Gal</option>
+                        <option>First Gravure</option>
+                        <option>Limited Edition</option>
+                        <option>Special</option>
+                        <option>Feti Style</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">History</label>
+            <div class="control">
+                <div class="field has-addons">
+                    <div class="select">
+                        <select class="input" id="history-list"> </select>
+                    </div>
+                    <div class="control">
+                        <button id="history-select" class="button is-info" type="button">Select</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <button id="download" type="button" class="button is-primary">Download</button>
+        </div>
+    </section>
+    
+    <script src="browser-polyfill.min.js"></script>
+    <script src="popup.js"></script>
+</body>
+
+</html>
