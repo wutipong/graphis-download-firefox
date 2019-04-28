@@ -1,21 +1,21 @@
 {
-  "name": "graphis-download",
+  "name": "graphis-download-firefox",
   "version": "2019.4.3",
-  "description": "Helper tool for downloading images, model page, and movies, from Graphis website. Membership is still required.",
+  "description": "Firefox version of helper tool for downloading images, model page, and movies, from Graphis website. Membership is still required.",
   "main": "background.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wutipong/graphis-download.git"
+    "url": "git+https://github.com/wutipong/graphis-download-firefox.git"
   },
   "author": "Wutipong Wongsakuldej",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wutipong/graphis-download/issues"
+    "url": "https://github.com/wutipong/graphis-download-firefox/issues"
   },
-  "homepage": "https://github.com/wutipong/graphis-download#readme",
+  "homepage": "https://github.com/wutipong/graphis-download-firefox/",
   "devDependencies": {
     "bulma": "^0.7.4",
     "bulmaswatch": "^0.7.2",
