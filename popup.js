@@ -14,6 +14,16 @@ browser.storage.local.get(['name', 'history', 'category', 'directory'], function
     historyValues = []
   }
 
+  if (historyValues.length > 0 && (historyValues[0] instanceof String || typeof (historyValues[0]) === 'string')) {
+    for (let i = 0; i < historyValues.length; i++) {
+      let key = historyValues[i]
+      historyValues[i] = {
+        key: key,
+        timestamp: Date.now()
+      }
+    }
+  }
+
   if (data.category != null) {
     categorySelect.selectedIndex = data.category
   }
@@ -24,13 +34,23 @@ browser.storage.local.get(['name', 'history', 'category', 'directory'], function
   updateHistory()
 })
 
+const maxItemCount = 20
+
 function updateHistory () {
   let historyListElement = document.getElementById('history-list')
   historyListElement.innerHTML = ''
 
+  historyValues.sort(function (a, b) {
+    return a.timestamp > b.timestamp
+  })
+
+  if (historyValues.length > maxItemCount) {
+    historyValues.length = maxItemCount
+  }
+
   historyValues.forEach(function (history) {
     let option = document.createElement('OPTION')
-    option.innerHTML = history
+    option.innerHTML = history.key
 
     historyListElement.appendChild(option)
   })
@@ -96,6 +116,7 @@ historySelect.addEventListener('click', function () {
   var event = document.createEvent('HTMLEvents')
   event.initEvent('change', true, false)
   nameElement.dispatchEvent(event)
+  categorySelect.dispatchEvent(event)
 })
 
 let downloadButton = document.getElementById('download')
@@ -111,20 +132,22 @@ downloadButton.addEventListener('click', function () {
       let category = categorySelect[categorySelect.selectedIndex].text
       let historyEntry = category + '\\' + name
 
-      if (historyValues.length === 0 ||
-        (historyValues.length > 0 && historyValues[0] !== historyEntry)) {
-        historyValues.unshift(historyEntry)
+      let currentItemIndex = historyValues.findIndex((history) => history.key === historyEntry)
 
-        if (historyValues.length > 10) {
-          historyValues.length = 10
-        }
-
-        browser.storage.local.set({
-          history: historyValues
+      if (currentItemIndex === -1) {
+        historyValues.unshift({
+          key: historyEntry,
+          timestamp: Date.now()
         })
-
-        updateHistory()
+      } else {
+        historyValues[currentItemIndex].timestamp = Date.now()
       }
+
+      updateHistory()
+
+      browser.storage.local.set({
+        history: historyValues
+      })
 
       response.forEach(function (download) {
         browser.downloads.download({
