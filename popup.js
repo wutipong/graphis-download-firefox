@@ -177,6 +177,7 @@ downloadButton.addEventListener('click', function () {
 
 function addInfo (downloadList, response, category, downloadPath, name) {
   const info = {
+    version: 1,
     profile: response.profile,
     comments: response.comments
   }
