@@ -67,12 +67,11 @@ function getProfile () {
 }
 
 function getComments () {
-  let commentItems = document.querySelectorAll('.comment-box > div > ul > li')
-  let comments = ''
-
-  commentItems.forEach(function (node) {
-    comments += node.textContent + '\n'
-  })
+  let commentUl = document.body.querySelector('.comment-box > div > ul')
+  let comments = {
+    jp: commentUl.querySelector('.text-jp').textContent.trim(),
+    en: commentUl.querySelector('.text-en').textContent.trim()
+  }
 
   return comments
 }
