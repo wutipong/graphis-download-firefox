@@ -167,8 +167,6 @@ downloadButton.addEventListener('click', function () {
           filename: download.filename
         })
       })
-
-      window.close()
     })
   })
 })
