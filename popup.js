@@ -183,7 +183,7 @@ function addInfo (downloadList, response, category, downloadPath, name) {
   }
   const infoJson = JSON.stringify(info)
   const bytes = new TextEncoder().encode(infoJson)
-  const blob = new Blob ([bytes], { type: 'application/json;charset=utf-8' })
+  const blob = new Blob([bytes], { type: 'application/json;charset=utf-8' })
   var url = URL.createObjectURL(blob)
 
   downloadList.push({
