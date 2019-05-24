@@ -149,18 +149,18 @@ downloadButton.addEventListener('click', function () {
         history: historyValues
       })
 
-      const downloadPath = (directoryText.value.length === 0 ? '' : (directoryText.value + '\\'))
+      const downloadPath = (directoryText.value.length === 0 ? '' : (directoryText.value + '\\')) + category + '\\' + name
       let downloadList = []
 
       response.urls.forEach(function (download) {
         downloadList.push({
           url: download.url,
-          filename: downloadPath + category + '\\' + name + '\\' + download.name
+          filename: downloadPath + '\\' + download.name
         })
       })
 
       if (response.profile !== undefined || response.comments !== undefined) {
-        addInfo(downloadList, response, downloadPath, category, name)
+        addInfo(downloadList, response, downloadPath)
       }
 
       downloadList.forEach(function (download) {
@@ -175,7 +175,7 @@ downloadButton.addEventListener('click', function () {
   })
 })
 
-function addInfo (downloadList, response, downloadPath, category, name) {
+function addInfo (downloadList, response, downloadPath) {
   const info = {
     version: 1,
     profile: response.profile,
@@ -188,6 +188,6 @@ function addInfo (downloadList, response, downloadPath, category, name) {
 
   downloadList.push({
     url: url,
-    filename: downloadPath + category + '\\' + name + '\\' + 'info.json'
+    filename: downloadPath + '\\' + 'info.json'
   })
 }
