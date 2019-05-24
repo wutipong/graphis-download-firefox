@@ -40,9 +40,7 @@ function updateHistory () {
   let historyListElement = document.getElementById('history-list')
   historyListElement.innerHTML = ''
 
-  historyValues.sort(function (a, b) {
-    return a.timestamp > b.timestamp
-  })
+  historyValues.sort((a, b) => a.timestamp < b.timestamp)
 
   if (historyValues.length > maxItemCount) {
     historyValues.length = maxItemCount
