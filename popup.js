@@ -159,8 +159,7 @@ downloadButton.addEventListener('click', function () {
         })
       })
 
-      console.log(response.profile)
-      if (response.profile !== null || response.comments !== null) {
+      if (response.profile !== undefined || response.comments !== undefined) {
         addInfo(downloadList, response, category, downloadPath, name)
       }
 
