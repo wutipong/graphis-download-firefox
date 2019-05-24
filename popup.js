@@ -160,7 +160,7 @@ downloadButton.addEventListener('click', function () {
       })
 
       if (response.profile !== undefined || response.comments !== undefined) {
-        addInfo(downloadList, response, category, downloadPath, name)
+        addInfo(downloadList, response, downloadPath, category, name)
       }
 
       downloadList.forEach(function (download) {
@@ -175,7 +175,7 @@ downloadButton.addEventListener('click', function () {
   })
 })
 
-function addInfo (downloadList, response, category, downloadPath, name) {
+function addInfo (downloadList, response, downloadPath, category, name) {
   const info = {
     version: 1,
     profile: response.profile,
