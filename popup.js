@@ -149,13 +149,45 @@ downloadButton.addEventListener('click', function () {
         history: historyValues
       })
 
-      response.forEach(function (download) {
-        browser.downloads.download({
+      const downloadPath = (directoryText.value.length === 0 ? '' : (directoryText.value + '\\'))
+      let downloadList = []
+
+      response.urls.forEach(function (download) {
+        downloadList.push({
           url: download.url,
-          filename: (directoryText.value.length === 0 ? '' : (directoryText.value + '\\')) + category + '\\' + name + '\\' + download.name
+          filename: downloadPath + category + '\\' + name + '\\' + download.name
         })
       })
+
+      console.log(response.profile)
+      if (response.profile !== null || response.comments !== null) {
+        addInfo(downloadList, response, category, downloadPath, name)
+      }
+
+      downloadList.forEach(function (download) {
+        browser.downloads.download({
+          url: download.url,
+          filename: download.filename
+        })
+      })
+
       window.close()
     })
   })
 })
+
+function addInfo (downloadList, response, category, downloadPath, name) {
+  const info = {
+    profile: response.profile,
+    comments: response.comments
+  }
+  const infoJson = JSON.stringify(info)
+  const bytes = new TextEncoder().encode(infoJson)
+  const blob = new Blob ([bytes], { type: 'application/json;charset=utf-8' })
+  var url = URL.createObjectURL(blob)
+
+  downloadList.push({
+    url: url,
+    filename: downloadPath + category + '\\' + name + '\\' + 'info.json'
+  })
+}
