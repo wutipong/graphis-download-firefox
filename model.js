@@ -1,26 +1,38 @@
 browser.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
-    let response = {
-      urls: []
+    if (request.command === 'download') {
+      sendURL(sendResponse)
+    } else if (request.command === 'populate') {
+      sendModelInfo(sendResponse)
     }
-
-    let modelBoxes = document.querySelectorAll('.model-box2 > img')
-    if (modelBoxes.length > 0) {
-      response.urls.push({
-        name: 'model.jpg',
-        url: modelBoxes[0].getAttribute('src')
-      })
-    }
-
-    addUrlsFromGalleryBox('.photo-gallery-box', 'pic', response.urls)
-    addUrlsFromGalleryBox('.video-gallery-box', 'movs', response.urls)
-
-    response.profile = getProfile()
-    response.comments = getComments()
-
-    console.log(response)
-    sendResponse(response)
   })
+
+function sendURL (sendResponse) {
+  let response = {
+    urls: []
+  }
+  let modelBoxes = document.querySelectorAll('.model-box2 > img')
+  if (modelBoxes.length > 0) {
+    response.urls.push({
+      name: 'model.jpg',
+      url: modelBoxes[0].getAttribute('src')
+    })
+  }
+  addUrlsFromGalleryBox('.photo-gallery-box', 'pic', response.urls)
+  addUrlsFromGalleryBox('.video-gallery-box', 'movs', response.urls)
+  response.profile = getProfile()
+  response.comments = getComments()
+
+  sendResponse(response)
+}
+
+function sendModelInfo (sendResponse) {
+  let navLinks = document.querySelectorAll('.pan-link')
+
+  sendResponse({
+    name: navLinks[0].textContent.split('>')[2]
+  })
+}
 
 function addUrlsFromGalleryBox (selector, name, array) {
   let selectorElem = document.querySelectorAll(selector)

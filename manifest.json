@@ -45,6 +45,7 @@
     "permissions": [
         "storage",
         "activeTab",
-        "downloads"
+        "downloads",
+        "clipboardRead"
     ]
 }

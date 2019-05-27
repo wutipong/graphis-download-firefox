@@ -124,7 +124,7 @@ downloadButton.addEventListener('click', function () {
     currentWindow: true
   }, function (tabs) {
     browser.tabs.sendMessage(tabs[0].id, {
-      greeting: 'hello'
+      command: 'download'
     }, function (response) {
       let name = nameElement.value
       let category = categorySelect[categorySelect.selectedIndex].text
@@ -187,3 +187,31 @@ function addInfo (downloadList, response, downloadPath) {
     filename: downloadPath + '\\' + 'info.json'
   })
 }
+
+let pasteButton = document.getElementById('paste')
+pasteButton.addEventListener('click', async function () {
+  let text = await navigator.clipboard.readText()
+  nameElement.value = text
+
+  var event = document.createEvent('HTMLEvents')
+  event.initEvent('change', true, false)
+  nameElement.dispatchEvent(event)
+})
+
+let populateButton = document.getElementById('populate')
+populateButton.addEventListener('click', function () {
+  browser.tabs.query({
+    active: true,
+    currentWindow: true
+  }, function (tabs) {
+    browser.tabs.sendMessage(tabs[0].id, {
+      command: 'populate'
+    }, function (response) {
+      nameElement.value = response.name
+
+      var event = document.createEvent('HTMLEvents')
+      event.initEvent('change', true, false)
+      nameElement.dispatchEvent(event)
+    })
+  })
+})
