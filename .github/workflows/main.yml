@@ -16,3 +16,8 @@ jobs:
       - run: sudo npm install -G gulp-cli
 
       - run: gulp
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: graphis-download-firefox
+          path: dist
