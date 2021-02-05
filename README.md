@@ -1,8 +1,10 @@
 # Graphis Download Helper
 
+![main](https://github.com/wutipong/graphis-download-firefox/workflows/main/badge.svg)
+
 Graphis Download Helper is a tool that assist the Graphis webiste member to download media files quickly and easily orgnize the downloads. The member is still required to pay and to recieve a proper membership level in order to download the files. It does not help you to download files that you don't have access to.
 
-Graphis Download Helper is available on [Chrome Web Store](https://chrome.google.com/webstore/detail/graphis-model-page-downlo/nkbpnklgliilbcemepaiabkgkdjoakcb). This extension is not listed so only user with the link is able to installed.
+~~Graphis Download Helper is available on [Chrome Web Store](https://chrome.google.com/webstore/detail/graphis-model-page-downlo/nkbpnklgliilbcemepaiabkgkdjoakcb) Firefox.~~ Store URL is TBD
 
 ## What is 'Graphis'
 
@@ -21,7 +23,7 @@ The downloader operates differently between those two pages.
 * Model page will download the model heading image and any viewer page's thumbnail.
 * The viewer page will download the zip file, or the HD movie file, depends on what kind of media you're viewing.
 
-Last but not least, the Download subfolder can be specified in the tool. The files that are added from the tool will be keep inside the folder, which is inside the Dowload directory Chrome is setup to. This will make organizing downloaded files easier.
+Last but not least, the Download subfolder can be specified in the tool. The files that are added from the tool will be keep inside the folder, which is inside the Dowload directory Firefox is setup to. This will make organizing downloaded files easier.
 
 ## What the downloader doesn't do.
 
