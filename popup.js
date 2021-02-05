@@ -1,9 +1,9 @@
-var path = require('path-browserify')
+const path = require('path-browserify')
 
-var historyValues = []
-var nameElement = document.getElementById('name')
-var categorySelect = document.getElementById('category')
-var directoryText = document.getElementById('directory')
+let historyValues = []
+const nameElement = document.getElementById('name')
+const categorySelect = document.getElementById('category')
+const directoryText = document.getElementById('directory')
 
 browser.storage.local.get(['name', 'history', 'category', 'directory'], function (data) {
   if (data.name != null) {
@@ -18,7 +18,7 @@ browser.storage.local.get(['name', 'history', 'category', 'directory'], function
 
   if (historyValues.length > 0 && (historyValues[0] instanceof String || typeof (historyValues[0]) === 'string')) {
     for (let i = 0; i < historyValues.length; i++) {
-      let key = historyValues[i]
+      const key = historyValues[i]
       historyValues[i] = {
         key: key,
         timestamp: Date.now()
@@ -39,7 +39,7 @@ browser.storage.local.get(['name', 'history', 'category', 'directory'], function
 const maxItemCount = 20
 
 function updateHistory () {
-  let historyListElement = document.getElementById('history-list')
+  const historyListElement = document.getElementById('history-list')
   historyListElement.innerHTML = ''
 
   historyValues.sort((a, b) => a.timestamp < b.timestamp)
@@ -49,7 +49,7 @@ function updateHistory () {
   }
 
   historyValues.forEach(function (history) {
-    let option = document.createElement('OPTION')
+    const option = document.createElement('OPTION')
     option.innerHTML = history.key
 
     historyListElement.appendChild(option)
@@ -80,30 +80,29 @@ directoryText.addEventListener('change', function (event) {
 })
 
 categorySelect.addEventListener('change', function (event) {
-  let category = categorySelect.selectedIndex
+  const category = categorySelect.selectedIndex
 
   browser.storage.local.set({
     category: category
   })
 })
 
-let clearButton = document.getElementById('clear')
+const clearButton = document.getElementById('clear')
 clearButton.addEventListener('click', function () {
   nameElement.value = ''
 
-  var event = document.createEvent('HTMLEvents')
+  const event = document.createEvent('HTMLEvents')
   event.initEvent('change', true, false)
   nameElement.dispatchEvent(event)
 })
 
-let historyListSelect = document.getElementById('history-list')
+const historyListSelect = document.getElementById('history-list')
 
 historyListSelect.addEventListener('change', function () {
-  if(historyListSelect.selectedIndex < 0) 
-    return
+  if (historyListSelect.selectedIndex < 0) return
 
-  let selectItem = historyListSelect.options[historyListSelect.selectedIndex]
-  let selectText = selectItem.text.split('\\')
+  const selectItem = historyListSelect.options[historyListSelect.selectedIndex]
+  const selectText = selectItem.text.split('\\')
 
   if (selectText.length === 2) {
     nameElement.value = selectText[1]
@@ -116,13 +115,13 @@ historyListSelect.addEventListener('change', function () {
     nameElement.value = selectText[0]
   }
 
-  var event = document.createEvent('HTMLEvents')
+  const event = document.createEvent('HTMLEvents')
   event.initEvent('change', true, false)
   nameElement.dispatchEvent(event)
   categorySelect.dispatchEvent(event)
 })
 
-let downloadButton = document.getElementById('download')
+const downloadButton = document.getElementById('download')
 downloadButton.addEventListener('click', function () {
   browser.tabs.query({
     active: true,
@@ -131,11 +130,11 @@ downloadButton.addEventListener('click', function () {
     browser.tabs.sendMessage(tabs[0].id, {
       command: 'download'
     }, function (response) {
-      let name = nameElement.value
-      let category = categorySelect[categorySelect.selectedIndex].text
-      let historyEntry = category + '\\' + name
+      const name = nameElement.value
+      const category = categorySelect[categorySelect.selectedIndex].text
+      const historyEntry = category + '\\' + name
 
-      let currentItemIndex = historyValues.findIndex((history) => history.key === historyEntry)
+      const currentItemIndex = historyValues.findIndex((history) => history.key === historyEntry)
 
       if (currentItemIndex === -1) {
         historyValues.unshift({
@@ -153,7 +152,7 @@ downloadButton.addEventListener('click', function () {
       })
 
       const downloadPath = path.join((directoryText.value.length === 0 ? '' : directoryText.value), category, name)
-      let downloadList = []
+      const downloadList = []
 
       response.urls.forEach(function (download) {
         downloadList.push({
@@ -185,7 +184,7 @@ function addInfo (downloadList, response, downloadPath) {
   const infoJson = JSON.stringify(info)
   const bytes = new TextEncoder().encode(infoJson)
   const blob = new Blob([bytes], { type: 'application/json;charset=utf-8' })
-  var url = URL.createObjectURL(blob)
+  const url = URL.createObjectURL(blob)
 
   downloadList.push({
     url: url,
@@ -193,17 +192,17 @@ function addInfo (downloadList, response, downloadPath) {
   })
 }
 
-let pasteButton = document.getElementById('paste')
+const pasteButton = document.getElementById('paste')
 pasteButton.addEventListener('click', async function () {
-  let text = await navigator.clipboard.readText()
+  const text = await navigator.clipboard.readText()
   nameElement.value = text
 
-  var event = document.createEvent('HTMLEvents')
+  const event = document.createEvent('HTMLEvents')
   event.initEvent('change', true, false)
   nameElement.dispatchEvent(event)
 })
 
-let populateButton = document.getElementById('populate')
+const populateButton = document.getElementById('populate')
 populateButton.addEventListener('click', function () {
   browser.tabs.query({
     active: true,
@@ -214,7 +213,7 @@ populateButton.addEventListener('click', function () {
     }, function (response) {
       nameElement.value = response.name
 
-      var event = document.createEvent('HTMLEvents')
+      const event = document.createEvent('HTMLEvents')
       event.initEvent('change', true, false)
       nameElement.dispatchEvent(event)
     })
