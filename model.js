@@ -8,10 +8,10 @@ browser.runtime.onMessage.addListener(
   })
 
 function sendURL (sendResponse) {
-  let response = {
+  const response = {
     urls: []
   }
-  let modelBoxes = document.querySelectorAll('.model-box2 > img')
+  const modelBoxes = document.querySelectorAll('.model-box2 > img')
   if (modelBoxes.length > 0) {
     response.urls.push({
       name: 'model.jpg',
@@ -27,7 +27,7 @@ function sendURL (sendResponse) {
 }
 
 function sendModelInfo (sendResponse) {
-  let navLinks = document.querySelectorAll('.pan-link')
+  const navLinks = document.querySelectorAll('.pan-link')
 
   sendResponse({
     name: navLinks[0].textContent.split('>')[2]
@@ -35,20 +35,20 @@ function sendModelInfo (sendResponse) {
 }
 
 function addUrlsFromGalleryBox (selector, name, array) {
-  let selectorElem = document.querySelectorAll(selector)
+  const selectorElem = document.querySelectorAll(selector)
   if (selectorElem.length <= 0) {
     return
   }
 
-  var photoThumb = selectorElem[0].querySelectorAll('.photo-thumb')
+  const photoThumb = selectorElem[0].querySelectorAll('.photo-thumb')
   if (photoThumb.length <= 0) {
     return
   }
 
-  var children = photoThumb[0].children
+  const children = photoThumb[0].children
   for (let i = 0; i < children.length; i++) {
-    let div = children[i]
-    let img = div.querySelectorAll('ul > li > a > img')
+    const div = children[i]
+    const img = div.querySelectorAll('ul > li > a > img')
     if (img.length > 0) {
       array.push({
         name: name + (i + 1) + '.jpg',
@@ -59,15 +59,15 @@ function addUrlsFromGalleryBox (selector, name, array) {
 }
 
 function getProfile () {
-  let profileItems = document.querySelectorAll('.model-prof > div > ul > li')
-  let profileMap = []
+  const profileItems = document.querySelectorAll('.model-prof > div > ul > li')
+  const profileMap = []
   profileItems.forEach(function (node) {
-    let key = node.firstChild.textContent
-    let value = node.lastChild.textContent
+    const key = node.firstChild.textContent
+    const value = node.lastChild.textContent
     profileMap[key] = value
   })
 
-  let profile = {
+  const profile = {
     age: profileMap['年齢 /age：'],
     height: profileMap['身長 /height：'],
     bwh: profileMap['スリーサイズ /BWH：'],
@@ -79,8 +79,8 @@ function getProfile () {
 }
 
 function getComments () {
-  let commentUl = document.body.querySelector('.comment-box > div > ul')
-  let comments = {
+  const commentUl = document.body.querySelector('.comment-box > div > ul')
+  const comments = {
     jp: commentUl.querySelector('.text-jp').textContent.trim(),
     en: commentUl.querySelector('.text-en').textContent.trim()
   }

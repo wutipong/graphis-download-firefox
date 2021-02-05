@@ -8,14 +8,12 @@ browser.runtime.onMessage.addListener(
   })
 
 function sendUrl (sendResponse) {
-  let dlbuttons = document.querySelectorAll('.dl-button')
+  const dlbuttons = document.querySelectorAll('.dl-button')
   if (dlbuttons.length <= 0) return
 
-  let dlButton = dlbuttons[0]
-
-  let url = dlButton.getAttribute('href')
-
-  let response = {
+  const dlButton = dlbuttons[0]
+  const url = dlButton.getAttribute('href')
+  const response = {
     urls: [
       {
         name: url.substring(url.lastIndexOf('/') + 1),
@@ -27,7 +25,7 @@ function sendUrl (sendResponse) {
 }
 
 function sendModelInfo (sendResponse) {
-  let navLinks = document.querySelectorAll('.pan-link > a')
+  const navLinks = document.querySelectorAll('.pan-link > a')
 
   sendResponse({
     name: navLinks[2].textContent
