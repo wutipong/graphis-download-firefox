@@ -95,8 +95,11 @@ clearButton.addEventListener('click', function () {
 })
 
 let historyListSelect = document.getElementById('history-list')
-let historySelect = document.getElementById('history-select')
-historySelect.addEventListener('click', function () {
+
+historyListSelect.addEventListener('change', function () {
+  if(historyListSelect.selectedIndex < 0) 
+    return
+
   let selectItem = historyListSelect.options[historyListSelect.selectedIndex]
   let selectText = selectItem.text.split('\\')
 
