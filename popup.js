@@ -1,3 +1,5 @@
+var path = require('path-browserify')
+
 var historyValues = []
 var nameElement = document.getElementById('name')
 var categorySelect = document.getElementById('category')
@@ -150,13 +152,13 @@ downloadButton.addEventListener('click', function () {
         history: historyValues
       })
 
-      const downloadPath = (directoryText.value.length === 0 ? '' : (directoryText.value + '\\')) + category + '\\' + name
+      const downloadPath = path.join((directoryText.value.length === 0 ? '' : directoryText.value), category, name)
       let downloadList = []
 
       response.urls.forEach(function (download) {
         downloadList.push({
           url: download.url,
-          filename: downloadPath + '\\' + download.name
+          filename: path.join(downloadPath, download.name)
         })
       })
 
@@ -187,7 +189,7 @@ function addInfo (downloadList, response, downloadPath) {
 
   downloadList.push({
     url: url,
-    filename: downloadPath + '\\' + 'info.json'
+    filename: path.join(downloadPath, 'info.json')
   })
 }
 
