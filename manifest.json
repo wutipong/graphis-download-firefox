@@ -1,6 +1,6 @@
 {
     "name": "Graphis Download Helper",
-    "version": "2019.5.4",
+    "version": "2021.1.1",
     "description": "Helper tool for downloading images, model page, and movies, from Graphis website. Membership is still required.",
     "manifest_version": 2,
     "content_scripts": [
@@ -21,6 +21,24 @@
                 "browser-polyfill.min.js",
                 "item.js"
             ]
+        },
+        {
+            "matches": [
+                "https://graphis.ne.jp/monthly/model.php*"
+            ],
+            "js": [
+                "browser-polyfill.min.js",
+                "model.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://graphis.ne.jp/monthly/item.php*"
+            ],
+            "js": [
+                "browser-polyfill.min.js",
+                "item.js"
+            ]
         }
     ],
     "page_action": {
@@ -33,7 +51,9 @@
         },
         "show_matches": [
             "http://graphis.ne.jp/monthly/model.php*",
-            "http://graphis.ne.jp/monthly/item.php*"
+            "http://graphis.ne.jp/monthly/item.php*",
+            "https://graphis.ne.jp/monthly/model.php*",
+            "https://graphis.ne.jp/monthly/item.php*"
         ]
     },
     "icons": {
