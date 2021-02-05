@@ -2,7 +2,7 @@ name: main
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build:
@@ -14,5 +14,5 @@ jobs:
       - run: npm install
 
       - run: sudo npm install -G gulp-cli
-      
+
       - run: gulp
