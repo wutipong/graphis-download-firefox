@@ -4,6 +4,8 @@ const browser = require('webextension-polyfill')
 const path = require('path-browserify')
 
 let historyValues = []
+const maxHistoryItemCount = 25
+
 const nameElement = document.getElementById('name')
 const categorySelect = document.getElementById('category')
 const directoryText = document.getElementById('directory')
@@ -39,16 +41,14 @@ browser.storage.local.get(['name', 'history', 'category', 'directory'], function
   updateHistory()
 })
 
-const maxItemCount = 20
-
-function updateHistory () {
+function updateHistory() {
   const historyListElement = document.getElementById('history-list')
   historyListElement.innerHTML = ''
 
   historyValues.sort((a, b) => a.timestamp < b.timestamp)
 
-  if (historyValues.length > maxItemCount) {
-    historyValues.length = maxItemCount
+  if (historyValues.length > maxHistoryItemCount) {
+    historyValues.length = maxHistoryItemCount
   }
 
   historyValues.forEach(function (history) {
@@ -178,7 +178,7 @@ downloadButton.addEventListener('click', function () {
   })
 })
 
-function addInfo (downloadList, response, downloadPath) {
+function addInfo(downloadList, response, downloadPath) {
   const info = {
     version: 1,
     profile: response.profile,
