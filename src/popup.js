@@ -1,3 +1,6 @@
+import '../scss/style.scss'
+
+const browser = require('webextension-polyfill')
 const path = require('path-browserify')
 
 let historyValues = []

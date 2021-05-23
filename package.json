@@ -2,9 +2,8 @@
   "name": "graphis-download-firefox",
   "version": "2019.5.4",
   "description": "Firefox version of helper tool for downloading images, model page, and movies, from Graphis website. Membership is still required.",
-  "main": "background.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "parcel build ./src/popup.html --dist-dir ./dist && parcel build ./src/item.js --dist-dir ./dist && parcel build ./src/model.js --dist-dir ./dist"
   },
   "repository": {
     "type": "git",
@@ -17,6 +16,8 @@
   },
   "homepage": "https://github.com/wutipong/graphis-download-firefox/",
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@parcel/transformer-sass": "^2.0.0-nightly.681",
     "browserify": "^17.0.0",
     "bulma": "^0.9.2",
     "bulmaswatch": "^0.8.1",
@@ -26,16 +27,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^5.0.0",
-    "gulp": "^4.0.2",
-    "gulp-clean": "^0.4.0",
-    "gulp-sass": "^4.1.0",
-    "gulp-sourcemaps": "^3.0.0",
-    "gulp-uglify": "^3.0.2",
-    "lato-font": "^3.0.0",
-    "merge-stream": "^2.0.0",
-    "node-sass": "^5.0.0",
-    "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0",
-    "yargs-parser": ">=5.0.0-security.0"
+    "parcel": "^2.0.0-beta.3.1",
+    "webextension-polyfill": "^0.8.0"
   }
 }
