@@ -4,8 +4,6 @@
 
 Graphis Download Helper is a tool that assist the Graphis webiste member to download media files quickly and easily orgnize the downloads. The member is still required to pay and to recieve a proper membership level in order to download the files. It does not help you to download files that you don't have access to.
 
-~~Graphis Download Helper is available on [Chrome Web Store](https://chrome.google.com/webstore/detail/graphis-model-page-downlo/nkbpnklgliilbcemepaiabkgkdjoakcb) Firefox.~~ Store URL is TBD
-
 ## What is 'Graphis'
 
 (Adult Contents Alert) [Graphis](http://graphis.ne.jp/) is a Japanese commercial website which provides nude gravure pictures and movie. Membership is free, however, monthly fee is required in order to view/download any media from the website. Alternatively, it also provides pay per view media as well.
@@ -30,3 +28,13 @@ Last but not least, the Download subfolder can be specified in the tool. The fil
 * The downloader won't allow you to download media which you have no right/access to it. 
 * The downloader won't crawl inside the model page and download all of the zip file of that collection. The user has to download the file one by one.
 * The downloader won't tell anyone the file that you have downloaded, nor telling anyone you've subscribe to Graphis's service.
+
+
+## NPM Scripts
+The Download Helper use several NPM scripts to do certain tasks. 
+
+### Bundling the extension
+use `npm run build` to bundle the extension. The output dir is `build`. You can load unzipped extension on Firefox using this path.
+
+### Creating XPI file.
+use `npm run release` to create the xpi file. The output dir is `out`.
