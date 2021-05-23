@@ -13,11 +13,10 @@ jobs:
 
       - run: npm install
 
-      - run: sudo npm install -G gulp-cli
-
-      - run: gulp
+      - run: npm run release
 
       - uses: actions/upload-artifact@v2
         with:
           name: graphis-download-firefox
-          path: dist
+          path: out
+
