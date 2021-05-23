@@ -3,7 +3,7 @@
   "version": "2019.5.4",
   "description": "Firefox version of helper tool for downloading images, model page, and movies, from Graphis website. Membership is still required.",
   "scripts": {
-    "build": "parcel build ./src/popup.html --dist-dir ./dist && parcel build ./src/item.js --dist-dir ./dist && parcel build ./src/model.js --dist-dir ./dist"
+    "build": "parcel build ./src/popup.html ./src/item.js ./src/model.js --dist-dir ./dist"
   },
   "repository": {
     "type": "git",
