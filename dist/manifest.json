@@ -9,7 +9,6 @@
                 "http://graphis.ne.jp/monthly/model.php*"
             ],
             "js": [
-                "browser-polyfill.min.js",
                 "model.js"
             ]
         },
@@ -26,7 +25,6 @@
                 "https://graphis.ne.jp/monthly/model.php*"
             ],
             "js": [
-                "browser-polyfill.min.js",
                 "model.js"
             ]
         },
