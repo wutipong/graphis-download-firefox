@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "rootDir": "src",
+        "outDir": "dist/js",
+        "noEmitOnError": true,
+        "lib": [
+            "es2015",
+            "dom",
+            "es2017"
+        ],
+        "typeRoots": [
+            "node_modules/@types",
+            "node_modules/web-ext-types"
+          ],
+    }
+}
