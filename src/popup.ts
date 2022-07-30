@@ -1,4 +1,4 @@
-import '../scss/style.scss'
+import './style.scss'
 
 import * as browser from 'webextension-polyfill'
 import * as path from 'path-browserify'
