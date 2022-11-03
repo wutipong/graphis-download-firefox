@@ -11,6 +11,7 @@
             "dom",
             "es2017"
         ],
+        "types": ["svelte"],
         "typeRoots": [
             "node_modules/@types",
             "node_modules/web-ext-types"
