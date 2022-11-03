@@ -7,7 +7,7 @@
     export let onSelect: (category: string, name: string)=>{}
 
     let items:HistoryItem[] = []
-    let selected = ""
+    let selected
 
     interface HistoryItem {
         timestamp: Date
@@ -25,10 +25,10 @@
     })
 
     async function onChange(){
-        let item = items[selected]
-        onSelect(item.category, item.name)
-        item.date = new Date()
-        items[selected] = item
+        onSelect(selected.category, selected.name)
+        selected.timestamp = new Date()
+
+        await add(selected.category, selected.name)
 
         await updateHistory()
     }
@@ -62,8 +62,8 @@
 
 <div class="select is-fullwidth">
     <select class="input" id="history-list" on:change={onChange} bind:value={selected}>
-        {#each items as item, index (item)}
-            <option value="{index}">{item.category}/{item.name}</option>
+        {#each items as item}
+            <option value={item}>{item.category}/{item.name}</option>
         {/each}
     </select>
 

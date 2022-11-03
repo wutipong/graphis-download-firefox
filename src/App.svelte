@@ -126,6 +126,11 @@
 
         name = response.name
     }
+
+    function onHistorySelect(c: string, n: string) {
+        categoryIndex = categoryOptions.indexOf(c)
+        name = n
+    }
 </script>
 
 
@@ -178,7 +183,7 @@
             <div class="field">
                 <div class="control is-expanded">
                     <div class="select is-fullwidth">
-                        <HistoryList bind:this={historyList}/>
+                        <HistoryList bind:this={historyList} onSelect="{onHistorySelect}"/>
                     </div>
                 </div>
             </div>
