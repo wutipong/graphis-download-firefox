@@ -17,8 +17,11 @@
 
     onMount(async ()=>{
         const data = await browser.storage.local.get(['history_items'])
-        items = JSON.parse(data.history)
-        await updateHistory()
+        if(data.history_items !== null && data.history_items !== "") {
+            console.log(data.history_items)
+            items = JSON.parse(data.history_items)
+            await updateHistory()
+        }
     })
 
     async function onChange(){
@@ -41,11 +44,16 @@
     }
 
     export async function add(category: string, name: string){
-        items.unshift({
-            timestamp: new Date(),
-            category: category,
-            name: name,
-        })
+        const index = items.findIndex(v =>v.category == category && v.name == name)
+        if(index == -1) {
+            items.unshift({
+                timestamp: new Date(),
+                category: category,
+                name: name,
+            })
+        } else {
+            items[index].timestamp = new Date()
+        }
 
         await updateHistory()
         selected = "0"
