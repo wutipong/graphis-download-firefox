@@ -2,15 +2,13 @@
 
     import * as browser from "webextension-polyfill";
     import * as path from "path-browserify";
-
-    let historyValues = []
-    const maxHistoryItemCount = 25
+    import HistoryList from "./HistoryList.svelte";
 
     let name = ""
     let categoryIndex = 0
-    let categoryText = ""
     let directory = ""
-    let historyIndex = 0
+
+    let historyList
 
     const categoryOptions = [
         "Graphis Gal",
@@ -20,25 +18,9 @@
         "Feti Style",
     ]
 
-    browser.storage.local.get(['name', 'history', 'category', 'directory']).then(function (data) {
+    browser.storage.local.get(['name',  'category', 'directory']).then(function (data) {
         if (data.name != null) {
             name = data.name
-        }
-
-        historyValues = data.history
-
-        if (historyValues == null) {
-            historyValues = []
-        }
-
-        if (historyValues.length > 0 && (historyValues[0] instanceof String || typeof (historyValues[0]) === 'string')) {
-            for (let i = 0; i < historyValues.length; i++) {
-                const key = historyValues[i]
-                historyValues[i] = {
-                    key: key,
-                    timestamp: Date.now()
-                }
-            }
         }
 
         if (data.category != null) {
@@ -48,26 +30,7 @@
         if (data.directory != null) {
             directory = data.directory
         }
-        updateHistory()
     })
-
-    function updateHistory() {
-        const historyListElement = document.getElementById('history-list')
-        historyListElement.innerHTML = ''
-
-        historyValues.sort((a, b) => a.timestamp < b.timestamp ? 0 : 1)
-
-        if (historyValues.length > maxHistoryItemCount) {
-            historyValues.length = maxHistoryItemCount
-        }
-
-        historyValues.forEach(function (history) {
-            const option = document.createElement('OPTION')
-            option.innerHTML = history.key
-
-            historyListElement.appendChild(option)
-        })
-    }
 
     function onNameChange() {
         name = name.replace('\\', ' ')
@@ -97,18 +60,6 @@
         name = ''
     }
 
-    function historyChange() {
-        const selectItem = historyValues[historyIndex]
-        const selectText = selectItem.text.split('\\')
-
-        if (selectText.length === 2) {
-            name = selectText[1]
-            categoryIndex = categoryOptions.indexOf(selectText[2])
-        } else {
-            name = selectText[0]
-        }
-    }
-
     function download() {
         browser.tabs.query({
             active: true,
@@ -117,24 +68,9 @@
             browser.tabs.sendMessage(tabs[0].id, {
                 command: 'download'
             }).then(function (response) {
-                const historyEntry = categoryText + '\\' + name
+                let categoryText = categoryOptions[categoryIndex]
 
-                const currentItemIndex = historyValues.findIndex((history) => history.key === historyEntry)
-
-                if (currentItemIndex === -1) {
-                    historyValues.unshift({
-                        key: historyEntry,
-                        timestamp: Date.now()
-                    })
-                } else {
-                    historyValues[currentItemIndex].timestamp = Date.now()
-                }
-
-                updateHistory()
-
-                browser.storage.local.set({
-                    history: historyValues
-                })
+                historyList.add(categoryText, name)
 
                 const downloadPath = path.join((directory.length === 0 ? '' : directory), categoryText, name)
                 const downloadList = []
@@ -245,7 +181,7 @@
             <div class="field">
                 <div class="control is-expanded">
                     <div class="select is-fullwidth">
-                        <select class="input" id="history-list" on:change={historyChange}> </select>
+                        <HistoryList bind:this={historyList}/>
                     </div>
                 </div>
             </div>
