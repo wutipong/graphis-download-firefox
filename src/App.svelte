@@ -60,38 +60,36 @@
         name = ''
     }
 
-    function download() {
-        browser.tabs.query({
+    async function download() {
+        const tabs = await browser.tabs.query({
             active: true,
             currentWindow: true
-        }).then(function (tabs) {
-            browser.tabs.sendMessage(tabs[0].id, {
-                command: 'download'
-            }).then(function (response) {
-                let categoryText = categoryOptions[categoryIndex]
+        })
+        const response = await browser.tabs.sendMessage(tabs[0].id, {
+            command: 'download'
+        })
+        let categoryText = categoryOptions[categoryIndex]
 
-                historyList.add(categoryText, name)
+        historyList.add(categoryText, name)
 
-                const downloadPath = path.join((directory.length === 0 ? '' : directory), categoryText, name)
-                const downloadList = []
+        const downloadPath = path.join((directory.length === 0 ? '' : directory), categoryText, name)
+        const downloadList = []
 
-                response.urls.forEach(function (download) {
-                    downloadList.push({
-                        url: download.url,
-                        filename: path.join(downloadPath, download.name)
-                    })
-                })
+        response.urls.forEach((download)=> {
+            downloadList.push({
+                url: download.url,
+                filename: path.join(downloadPath, download.name)
+            })
+        })
 
-                if (response.profile !== undefined || response.comments !== undefined) {
-                    addInfo(downloadList, response, downloadPath)
-                }
+        if (response.profile !== undefined || response.comments !== undefined) {
+            addInfo(downloadList, response, downloadPath)
+        }
 
-                downloadList.forEach(function (download) {
-                    browser.downloads.download({
-                        url: download.url,
-                        filename: download.filename
-                    })
-                })
+        downloadList.forEach((download)=> {
+            browser.downloads.download({
+                url: download.url,
+                filename: download.filename
             })
         })
     }
@@ -117,17 +115,16 @@
         name = await navigator.clipboard.readText()
     }
 
-    function populateName() {
-        browser.tabs.query({
+    async function populateName() {
+        const tabs = await browser.tabs.query({
             active: true,
             currentWindow: true
-        }).then(function (tabs) {
-            browser.tabs.sendMessage(tabs[0].id, {
-                command: 'populate'
-            }).then(function (response) {
-                name = response.name
-            })
         })
+        const response = await browser.tabs.sendMessage(tabs[0].id, {
+            command: 'populate'
+        })
+
+        name = response.name
     }
 </script>
 
