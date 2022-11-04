@@ -3,12 +3,13 @@
     import * as browser from "webextension-polyfill";
     import * as path from "path-browserify";
     import HistoryList from "./HistoryList.svelte";
+    import {onMount} from "svelte";
 
     let name = ""
-    let categoryIndex = 0
+    let category = "Graphis Gal"
     let directory = ""
 
-    let historyList
+    let historyList: HistoryList
 
     const categoryOptions = [
         "Graphis Gal",
@@ -18,15 +19,8 @@
         "Feti Style",
     ]
 
-    browser.storage.local.get(['name',  'category', 'directory']).then(function (data) {
-        if (data.name != null) {
-            name = data.name
-        }
-
-        if (data.category != null) {
-            categoryIndex = data.category
-        }
-
+    onMount(async()=>{
+        const data = await browser.storage.local.get(['directory']);
         if (data.directory != null) {
             directory = data.directory
         }
@@ -36,10 +30,6 @@
         name = name.replace('\\', ' ')
         name = name.replace('/', ' ')
         name = name.trim()
-
-        browser.storage.local.set({
-            name: name
-        })
     }
 
     function onDirectoryChange() {
@@ -47,12 +37,6 @@
 
         browser.storage.local.set({
             directory: directory
-        })
-    }
-
-    function onCategoryChange() {
-        browser.storage.local.set({
-            category: categoryIndex
         })
     }
 
@@ -68,11 +52,10 @@
         const response = await browser.tabs.sendMessage(tabs[0].id, {
             command: 'download'
         })
-        let categoryText = categoryOptions[categoryIndex]
 
-        historyList.add(categoryText, name)
+        historyList.add(category, name)
 
-        const downloadPath = path.join((directory.length === 0 ? '' : directory), categoryText, name)
+        const downloadPath = path.join((directory.length === 0 ? '' : directory), category, name)
         const downloadList = []
 
         response.urls.forEach((download)=> {
@@ -125,10 +108,11 @@
         })
 
         name = response.name
+        onNameChange()
     }
 
     function onHistorySelect(c: string, n: string) {
-        categoryIndex = categoryOptions.indexOf(c)
+        category = c
         name = n
     }
 </script>
@@ -138,13 +122,13 @@
     <h1 class="title">Graphis Download Helper</h1>
 
     <div class="field">
-        <label class="label">Name</label>
-        <div class="field has-addons">
+        <label class="label" for="name-control">Name</label>
+        <div class="field has-addons" id="name-control">
             <div class="control">
                 <div class="select">
-                    <select class="input" id="category" on:change={onCategoryChange}>
+                    <select class="input" id="category" bind:value={category}>
                         {#each categoryOptions as option}
-                            <option>{option}</option>
+                            <option value="{option}">{option}</option>
                         {/each}
                     </select>
                 </div>
@@ -178,8 +162,8 @@
     </div>
 
     <div class="field">
-        <label class="label">History</label>
-        <div class="control">
+        <label class="label" for="history-control">History</label>
+        <div class="control" id="history-control">
             <div class="field">
                 <div class="control is-expanded">
                     <div class="select is-fullwidth">
@@ -190,10 +174,10 @@
         </div>
     </div>
     <div class="field">
-        <label class="label">Download To</label>
-        <div class="field">
+        <label class="label" for="path-control">Download To</label>
+        <div class="field" id="path-control">
             <div class="control">
-                <input class="input" type="text" id="directory" value={directory} on:change={onDirectoryChange}
+                <input class="input" type="text" id="directory" bind:value="{directory}" on:change={onDirectoryChange}
                        placeholder="path inside browser's download.">
             </div>
         </div>

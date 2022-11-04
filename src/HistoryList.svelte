@@ -7,7 +7,15 @@
     export let onSelect: (category: string, name: string)=>{}
 
     let items:HistoryItem[] = []
-    let selected
+    let selected = undefined
+    $: {
+        if(selected !== undefined && onSelect) {
+            const value = items[selected]
+            onSelect(value.category, value.name)
+
+            add(value.category, value.name)
+        }
+    }
 
     interface HistoryItem {
         timestamp: Date
@@ -17,24 +25,17 @@
 
     onMount(async ()=>{
         const data = await browser.storage.local.get(['history_items'])
-        if(data.history_items !== null && data.history_items !== "") {
-            console.log(data.history_items)
-            items = JSON.parse(data.history_items)
-            await updateHistory()
+        if (!(data.history_items !== null && data.history_items !== "")) {
+            return;
         }
+
+        items = JSON.parse(data.history_items)
+        await updateHistory()
     })
 
-    async function onChange(){
-        onSelect(selected.category, selected.name)
-        selected.timestamp = new Date()
-
-        await add(selected.category, selected.name)
-
-        await updateHistory()
-    }
 
     async function updateHistory() {
-        items = items.sort((a, b) => a.timestamp < b.timestamp ? 0 : 1)
+        items = items.sort((a, b) => a.timestamp > b.timestamp ? 0 : 1)
         if(items.length > maxItemCount) {
             items.length = maxItemCount
         }
@@ -51,20 +52,16 @@
                 category: category,
                 name: name,
             })
-        } else {
-            items[index].timestamp = new Date()
         }
 
         await updateHistory()
-        selected = "0"
     }
 </script>
 
 <div class="select is-fullwidth">
-    <select class="input" id="history-list" on:change={onChange} bind:value={selected}>
-        {#each items as item}
-            <option value={item}>{item.category}/{item.name}</option>
+    <select class="input" id="history-list" bind:value={selected}>
+        {#each items as item, index}
+            <option value={index}>{item.category}/{item.name}</option>
         {/each}
     </select>
-
 </div>
