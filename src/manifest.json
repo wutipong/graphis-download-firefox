@@ -3,6 +3,11 @@
     "version": "2021.5.0",
     "description": "Helper tool for downloading images, model page, and movies, from Graphis website. Membership is still required.",
     "manifest_version": 2,
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
     "content_scripts": [
         {
             "matches": [

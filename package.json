@@ -4,7 +4,7 @@
   "description": "Firefox version of helper tool for downloading images, model page, and movies, from Graphis website. Membership is still required.",
   "scripts": {
     "prebuild": "npx rimraf build && npx rimraf out",
-    "bundle": "parcel build ./src/popup.html src/item.ts src/model.ts --dist-dir ./build",
+    "bundle": "parcel build ./src/popup.html src/item.ts src/model.ts src/background.ts --dist-dir ./build",
     "manifest": "npx copyfiles -u 1 ./src/manifest.json ./build && npx copyfiles -u 1 ./src/images/* ./build",
     "build": "npm run bundle && npm run manifest",
     "makexpi": "npx mkdirp out && cd build && bestzip ../out/graphis-download-firefox.xpi *",
