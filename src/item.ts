@@ -2,10 +2,10 @@ import * as browser from 'webextension-polyfill'
 
 browser.runtime.onMessage.addListener(
     function (request, sender) {
-        if (request.command === 'download') {
+        if (request.command === 'query') {
             return Promise.resolve(sendUrl());
-        } else if (request.command === 'populate') {
-            return Promise.resolve(sendModelInfo());
+        } else if (request.command === 'populateName') {
+            return Promise.resolve(sendModelName());
         }
     });
 
@@ -15,18 +15,15 @@ function sendUrl() {
 
     const dlButton = buttons[0];
     const url = dlButton.getAttribute('href');
-    const response = {
-        urls: [
-            {
-                name: url.substring(url.lastIndexOf('/') + 1),
-                url: url
-            }
-        ]
-    }
-    return response;
+    return {
+        urls: [{
+            name: url.substring(url.lastIndexOf('/') + 1),
+            url: url
+        }]
+    };
 }
 
-function sendModelInfo() {
+function sendModelName() {
     const navLinks = document.querySelectorAll('.pan-link > a');
 
     return {

@@ -44,13 +44,22 @@
         name = ''
     }
 
+    function addDownloads(response, downloadList: any[], downloadPath: string) {
+        response.urls.forEach((download) => {
+            downloadList.push({
+                url: download.url,
+                filename: path.join(downloadPath, download.name)
+            })
+        })
+    }
+
     async function download() {
         const tabs = await browser.tabs.query({
             active: true,
             currentWindow: true
         })
         const response = await browser.tabs.sendMessage(tabs[0].id, {
-            command: 'download'
+            command: 'query'
         })
 
         historyList.add(category, name)
@@ -58,16 +67,33 @@
         const downloadPath = path.join((directory.length === 0 ? '' : directory), category, name)
         const downloadList = []
 
-        response.urls.forEach((download)=> {
-            downloadList.push({
-                url: download.url,
-                filename: path.join(downloadPath, download.name)
-            })
-        })
+        addDownloads(response, downloadList, downloadPath);
 
         if (response.profile !== undefined || response.comments !== undefined) {
             addInfo(downloadList, response, downloadPath)
         }
+
+        const childrenTabs = await Promise.all(response.children.map(async child =>
+            await browser.tabs.create({
+                active: false,
+                url: child,
+                openerTabId: tabs[0].id
+            })
+        ))
+
+        childrenTabs.forEach(tab => {
+            while (tab.status == 'pending') {}
+        })
+
+        console.log("children", childrenTabs)
+
+        const childRes = await Promise.all(childrenTabs.map(tab => {
+            return browser.tabs.sendMessage(tab.id, {command: "query"})
+        }))
+
+        childRes.forEach(c => addDownloads(c, downloadList, downloadPath))
+
+        console.log(downloadList)
 
         downloadList.forEach((download)=> {
             browser.downloads.download({
@@ -104,7 +130,7 @@
             currentWindow: true
         })
         const response = await browser.tabs.sendMessage(tabs[0].id, {
-            command: 'populate'
+            command: 'populateName'
         })
 
         name = response.name
