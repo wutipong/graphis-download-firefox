@@ -44,13 +44,22 @@
         name = ''
     }
 
+    function addDownloads(response, downloadList: any[], downloadPath: string) {
+        response.urls.forEach((download) => {
+            downloadList.push({
+                url: download.url,
+                filename: path.join(downloadPath, download.name)
+            })
+        })
+    }
+
     async function download() {
-        const tabs = await browser.tabs.query({
+        const currentTabs = await browser.tabs.query({
             active: true,
             currentWindow: true
         })
-        const response = await browser.tabs.sendMessage(tabs[0].id, {
-            command: 'download'
+        const response = await browser.tabs.sendMessage(currentTabs[0].id, {
+            command: 'query'
         })
 
         historyList.add(category, name)
@@ -58,17 +67,29 @@
         const downloadPath = path.join((directory.length === 0 ? '' : directory), category, name)
         const downloadList = []
 
-        response.urls.forEach((download)=> {
-            downloadList.push({
-                url: download.url,
-                filename: path.join(downloadPath, download.name)
-            })
-        })
+        addDownloads(response, downloadList, downloadPath);
 
         if (response.profile !== undefined || response.comments !== undefined) {
             addInfo(downloadList, response, downloadPath)
         }
 
+        if(response.children !== undefined) {
+            const tabs = await Promise.all(
+                response.children.map(async child => await browser.tabs.create({
+                    active: false,
+                    url: child,
+                })
+            ))
+
+            const results = await Promise.all(tabs.map(async tab =>
+                queryFromItemTab(tab)
+            ))
+
+            results.forEach(c => addDownloads(c, downloadList, downloadPath) )
+            for (const t of tabs) {
+                await browser.tabs.remove(t.id);
+            }
+        }
         downloadList.forEach((download)=> {
             browser.downloads.download({
                 url: download.url,
@@ -104,7 +125,7 @@
             currentWindow: true
         })
         const response = await browser.tabs.sendMessage(tabs[0].id, {
-            command: 'populate'
+            command: 'populateName'
         })
 
         name = response.name
@@ -115,6 +136,20 @@
         category = c
         name = n
     }
+
+    async function queryFromItemTab(tab: browser.Tabs.Tab) {
+        while (true) {
+            try {
+                const result = await browser.tabs.sendMessage(tab.id, {command: "query"})
+                if (result != undefined) {
+                    return result
+                }
+            } catch (err) {
+
+            }
+        }
+    }
+
 </script>
 
 

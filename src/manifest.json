@@ -10,7 +10,9 @@
             ],
             "js": [
                 "model.js"
-            ]
+            ],
+            "run_at": "document_start",
+            "all_frames": true
         },
         {
             "matches": [
@@ -18,7 +20,9 @@
             ],
             "js": [
                 "item.js"
-            ]
+            ],
+            "run_at": "document_start",
+            "all_frames": true
         },
         {
             "matches": [
@@ -26,7 +30,9 @@
             ],
             "js": [
                 "model.js"
-            ]
+            ],
+            "run_at": "document_start",
+            "all_frames": true
         },
         {
             "matches": [
@@ -34,7 +40,9 @@
             ],
             "js": [
                 "item.js"
-            ]
+            ],
+            "run_at": "document_start",
+            "all_frames": true
         }
     ],
     "page_action": {
