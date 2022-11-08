@@ -54,11 +54,11 @@
     }
 
     async function download() {
-        const tabs = await browser.tabs.query({
+        const currentTabs = await browser.tabs.query({
             active: true,
             currentWindow: true
         })
-        const response = await browser.tabs.sendMessage(tabs[0].id, {
+        const response = await browser.tabs.sendMessage(currentTabs[0].id, {
             command: 'query'
         })
 
@@ -73,28 +73,23 @@
             addInfo(downloadList, response, downloadPath)
         }
 
-        const childrenTabs = await Promise.all(response.children.map(async child =>
-            await browser.tabs.create({
-                active: false,
-                url: child,
-                openerTabId: tabs[0].id
-            })
-        ))
+        if(response.children !== undefined) {
+            const tabs = await Promise.all(
+                response.children.map(async child => await browser.tabs.create({
+                    active: false,
+                    url: child,
+                })
+            ))
 
-        childrenTabs.forEach(tab => {
-            while (tab.status == 'pending') {}
-        })
+            const results = await Promise.all(tabs.map(async tab =>
+                queryFromItemTab(tab)
+            ))
 
-        console.log("children", childrenTabs)
-
-        const childRes = await Promise.all(childrenTabs.map(tab => {
-            return browser.tabs.sendMessage(tab.id, {command: "query"})
-        }))
-
-        childRes.forEach(c => addDownloads(c, downloadList, downloadPath))
-
-        console.log(downloadList)
-
+            results.forEach(c => addDownloads(c, downloadList, downloadPath) )
+            for (const t of tabs) {
+                await browser.tabs.remove(t.id);
+            }
+        }
         downloadList.forEach((download)=> {
             browser.downloads.download({
                 url: download.url,
@@ -141,6 +136,20 @@
         category = c
         name = n
     }
+
+    async function queryFromItemTab(tab: browser.Tabs.Tab) {
+        while (true) {
+            try {
+                const result = await browser.tabs.sendMessage(tab.id, {command: "query"})
+                if (result != undefined) {
+                    return result
+                }
+            } catch (err) {
+
+            }
+        }
+    }
+
 </script>
 
 

@@ -1,7 +1,8 @@
 import * as browser from 'webextension-polyfill'
 
 browser.runtime.onMessage.addListener(
-    function (request, sender) {
+    function (request) {
+        console.log(request)
         if (request.command === 'query') {
             return Promise.resolve(sendUrl());
         } else if (request.command === 'populateName') {
@@ -10,11 +11,14 @@ browser.runtime.onMessage.addListener(
     });
 
 function sendUrl() {
+    console.log("sendURL")
     const buttons = document.querySelectorAll('.dl-button');
     if (buttons.length <= 0) return;
 
     const dlButton = buttons[0];
     const url = dlButton.getAttribute('href');
+
+    console.log(url)
     return {
         urls: [{
             name: url.substring(url.lastIndexOf('/') + 1),
