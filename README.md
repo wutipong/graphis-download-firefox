@@ -25,10 +25,8 @@ Last but not least, the Download subfolder can be specified in the tool. The fil
 
 ## What the downloader doesn't do.
 
-* The downloader won't allow you to download media which you have no right/access to it. 
-* The downloader won't crawl inside the model page and download all of the zip file of that collection. The user has to download the file one by one.
+* The downloader won't allow you to download media which you have no right/access to it.
 * The downloader won't tell anyone the file that you have downloaded, nor telling anyone you've subscribe to Graphis's service.
-
 
 ## NPM Scripts
 The Download Helper use several NPM scripts to do certain tasks. 
