@@ -15,8 +15,8 @@ jobs:
 
       - run: npm run release
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: graphis-download-firefox
-          path: out
+          path: out/graphis-download-firefox.xpi
 
