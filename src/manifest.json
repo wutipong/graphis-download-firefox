@@ -3,6 +3,11 @@
     "version": "2.0.0",
     "description": "Helper tool for downloading images, model page, and movies, from Graphis website. Membership is still required.",
     "manifest_version": 2,
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "{eb370595-ec8b-4c2d-8475-0b398bd00983}"
+        }
+    },
     "content_scripts": [
         {
             "matches": [
