@@ -1,6 +1,6 @@
 {
   "name": "graphis-download-firefox",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Firefox version of helper tool for downloading images, model page, and movies, from Graphis website. Membership is still required.",
   "scripts": {
     "prebuild": "npx rimraf build && npx rimraf out",
