@@ -1,21 +1,10 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import {onMount} from 'svelte';
     import * as browser from "webextension-polyfill";
 
     const maxItemCount = 25
 
-    export let onSelect: (category: string, name: string)=>{}
-
-    let items:HistoryItem[] = []
-    let selected = undefined
-    $: {
-        if(selected !== undefined && onSelect) {
-            const value = items[selected]
-            onSelect(value.category, value.name)
-
-            add(value.category, value.name)
-        }
-    }
+    export let onSelect: (category: string, name: string) => {}
 
     interface HistoryItem {
         timestamp: Date
@@ -23,45 +12,57 @@
         name: string
     }
 
-    onMount(async ()=>{
+    let items: HistoryItem[] = []
+    let select: HTMLSelectElement
+
+    onMount(async () => {
         const data = await browser.storage.local.get(['history_items'])
         if (!(data.history_items !== null && data.history_items !== "")) {
             return;
         }
 
         items = JSON.parse(data.history_items)
-        await updateHistory()
+
+        if (items.length > 0 && onSelect != undefined) {
+            onSelect(items[0].category, items[0].name)
+        }
     })
 
+    export async function add(category: string, name: string) {
+        const index = items.findIndex(v => v.category == category && v.name == name)
+        if (index !== -1) {
+            select.selectedIndex = index
+            return
+        }
 
-    async function updateHistory() {
-        items = items.sort((a, b) => a.timestamp > b.timestamp ? 0 : 1)
-        if(items.length > maxItemCount) {
+        items.unshift({
+            timestamp: new Date(),
+            category: category,
+            name: name,
+        })
+
+        if (items.length > maxItemCount) {
             items.length = maxItemCount
         }
+
+        items = items
 
         const json = JSON.stringify(items)
         await browser.storage.local.set({'history_items': json})
     }
 
-    export async function add(category: string, name: string){
-        const index = items.findIndex(v =>v.category == category && v.name == name)
-        if(index == -1) {
-            items.unshift({
-                timestamp: new Date(),
-                category: category,
-                name: name,
-            })
-        }
+    function selectionChanged() {
+        const index = select.selectedIndex
+        const selected = items[index]
 
-        await updateHistory()
+        onSelect ? onSelect(selected.category, selected.name) : null
     }
 </script>
 
 <div class="select is-fullwidth">
-    <select class="input" id="history-list" bind:value={selected}>
-        {#each items as item, index}
-            <option value={index}>{item.category}/{item.name}</option>
+    <select class="input" on:change={selectionChanged} bind:this={select}>
+        {#each items as item}
+            <option>{item.category}/{item.name}</option>
         {/each}
     </select>
 </div>
